@@ -1,0 +1,74 @@
+run_name: SKA-MEL_richpediamel
+seed: 43
+pretrained_model: checkpoint/clip-vit-base-patch32
+lr: 1e-5
+data:
+  num_entity: 160933
+  kb_img_folder: data/RichpediaMEL/kb_image/kb_image
+  mention_img_folder: data/RichpediaMEL/mention_images/mention_images
+  qid2id: data/RichpediaMEL/qid2id.json
+  entity: data/RichpediaMEL/kb_entity.json
+  train_file: data/RichpediaMEL/RichpediaMEL_train.json
+  dev_file: data/RichpediaMEL/RichpediaMEL_dev.json
+  test_file: data/RichpediaMEL/RichpediaMEL_test.json
+  entity_triple_file: data/RichpediaMEL/kb_entity_triples.json
+  entity_triple_token_cache: data/RichpediaMEL/kb_entity_triple_token_cache.pkl
+  triple_max_num: 3
+  triple_text_max_length: 16
+  batch_size: 48
+  num_workers: 12
+  text_max_length: 50
+  visual_patch_length: 50
+  eval_chunk_size: 6000
+  eval_batch_size: 32
+  embed_update_batch_size: 1024
+model:
+  input_hidden_dim: 512
+  input_image_hidden_dim: 768
+  hidden_dim: 128
+  dv: 128
+  dt: 512
+  TGLU_hidden_dim: 128
+  IDLU_hidden_dim: 128
+  CMFU_hidden_dim: 128
+  num_experts: 4
+  top_experts: 4
+  enable_feb: true
+  use_triple: true
+  triple_hidden_dim: 96
+  triple_slot_num: 4
+  lambda_tri: 1.0
+  fusion_hidden_dim_4m: 64
+  fusion_prior_4m:
+  - 0.3
+  - 0.57
+  - 0.03
+  - 0.1
+  fusion_max_logit_delta_4m: 0.1
+  dataset_prior_delta_scale_init_4m: 1.0
+  dataset_prior_delta_scale_max_4m: 1.0
+  fusion_init_scale_4m:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+distillation:
+  enable: true
+  teacher_start_epoch: 1
+  refresh_teacher_every_epoch: true
+  temperature: 4.0
+  alpha: 2.25
+trainer:
+  accelerator: gpu
+  devices: 1
+  precision: 16
+  max_epochs: 50
+  num_sanity_val_steps: 0
+  check_val_every_n_epoch: 2
+  log_every_n_steps: 30
+  enable_checkpointing: true
+  gradient_clip_val: 1.0
+  enable_early_stopping: true
+  early_stopping_monitor: Val/mrr
+  early_stopping_mode: max
+  early_stopping_patience: 3
