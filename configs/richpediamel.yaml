@@ -3,7 +3,7 @@ seed: 43
 pretrained_model: checkpoint/clip-vit-base-patch32
 lr: 1e-5
 data:
-  num_entity: 160933
+  num_entity: 160935
   kb_img_folder: data/RichpediaMEL/kb_image/kb_image
   mention_img_folder: data/RichpediaMEL/mention_images/mention_images
   qid2id: data/RichpediaMEL/qid2id.json
